@@ -1,0 +1,39 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/auth-depl.yaml
+      - ./infra/k8s/auth-mongo-depl.yaml
+      - ./infra/k8s/client-depl.yaml
+      - ./infra/k8s/ingress-srv.yaml
+build:
+  local:
+    push: false
+  artifacts:
+    - image: ehtesham-dev/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: ehtesham-dev/client
+      context: ../client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+          - src: '**/*.css'
+            dest: .
+    - image: ehtesham-dev/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
