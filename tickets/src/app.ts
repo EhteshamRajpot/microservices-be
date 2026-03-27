@@ -5,9 +5,11 @@ import cookieSession from "cookie-session";
 
 const app = express();
 
+import { currentUser, errorHandler, NotFoundError } from "@devnexus_microservices/common";
+import { indexTicketRouter } from "./routes/index.js";
 import { newTicketRouter } from "./routes/new.js";
 import { showTicketRouter } from "./routes/show.js";
-import { currentUser, errorHandler, NotFoundError } from "@devnexus_microservices/common";
+import { updateTicketRouter } from "./routes/update.js";
 
 // CORS: allow browser requests from client (localhost:3000) and ticketing.dev
 app.use(
@@ -32,6 +34,8 @@ app.use(currentUser as any);
 
 app.use(newTicketRouter);
 app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 app.all("*", async (req, res, next) => {
   //   next(new NotFoundError());

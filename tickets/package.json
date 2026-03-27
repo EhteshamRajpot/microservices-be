@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsx src/index.ts",
-    "dev": "nodemon",
+    "dev": "nodemon --watch src --ext ts --exec \"tsx src/index.ts\"",
     "dev:tsx": "tsx watch src/index.ts",
     "test": "jest --watchAll --no-cache"
   },

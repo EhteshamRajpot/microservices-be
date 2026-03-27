@@ -23,7 +23,7 @@ metadata:
 spec:
   selector:
     app: tickets-mongo
-  ports: 
+  ports:
     - name: db
       protocol: TCP
       port: 27017
