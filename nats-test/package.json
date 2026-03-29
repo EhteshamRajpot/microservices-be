@@ -14,7 +14,8 @@
   },
   "scripts": {
     "publish": "tsx watch src/publisher.ts",
-    "listen": "tsx watch src/listener.ts"
+    "listen": "tsx watch src/listener.ts",
+    "port-forward:nats": "kubectl port-forward svc/nats-srv 4222:4222"
   },
   "keywords": [],
   "author": "",

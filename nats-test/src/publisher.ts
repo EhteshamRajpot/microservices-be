@@ -23,4 +23,14 @@ stan.on("connect", () => {
 
 stan.on("error", (err) => {
   console.error("NATS connection error:", err.message);
+  if (
+    err.message.includes("Could not connect") ||
+    (err as { code?: string }).code === "CONN_ERR"
+  ) {
+    console.error(
+      "\nNothing is listening at the configured URL. From your machine to NATS in the cluster, run in another terminal:\n" +
+        "  npm run port-forward:nats\n" +
+        "Or set NATS_URL (e.g. nats://localhost:4222 after port-forward, or nats://nats-srv:4222 inside Kubernetes).\n"
+    );
+  }
 });
