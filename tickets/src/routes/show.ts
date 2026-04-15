@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
 import { Ticket } from "../models/ticket.js";
-import { NotFoundError } from "@devnexus_microservices/common";
+import { NotFoundError } from "devnexus-microservices-common";
 
 const router = express.Router();
 

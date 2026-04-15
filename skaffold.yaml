@@ -33,10 +33,10 @@ build:
           - src: '**/*.css'
             dest: .
     - image: ehtesham-dev/tickets
-      context: tickets
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: tickets/Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: 'tickets/src/**/*.ts'
             dest: .

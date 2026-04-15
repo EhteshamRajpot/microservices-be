@@ -1,10 +1,18 @@
-FROM node:alpine
-
-WORKDIR /app
-RUN apk add --no-cache tar
-COPY package.json .
-# RUN npm install --omit=dev
+FROM node:alpine AS common-build
+WORKDIR /build/common
+COPY common/package.json ./
 RUN npm install
-COPY . .
+COPY common/tsconfig.json ./
+COPY common/src ./src
+RUN npm run build
+
+FROM node:alpine
+WORKDIR /app
+COPY --from=common-build /build/common ./common
+
+WORKDIR /app/tickets
+COPY tickets/package.json tickets/.npmrc ./
+RUN npm install
+COPY tickets/ ./
 
 CMD ["npm", "run", "dev"]

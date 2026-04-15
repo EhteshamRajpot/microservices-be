@@ -5,7 +5,7 @@ import cookieSession from "cookie-session";
 
 const app = express();
 
-import { currentUser, errorHandler, NotFoundError } from "@devnexus_microservices/common";
+import { currentUser, errorHandler, NotFoundError } from "devnexus-microservices-common";
 import { indexTicketRouter } from "./routes/index.js";
 import { newTicketRouter } from "./routes/new.js";
 import { showTicketRouter } from "./routes/show.js";
