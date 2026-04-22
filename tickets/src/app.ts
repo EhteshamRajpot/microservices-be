@@ -6,10 +6,10 @@ import cookieSession from "cookie-session";
 const app = express();
 
 import { currentUser, errorHandler, NotFoundError } from "devnexus-microservices-common";
-import { indexTicketRouter } from "./routes/index.js";
-import { newTicketRouter } from "./routes/new.js";
-import { showTicketRouter } from "./routes/show.js";
-import { updateTicketRouter } from "./routes/update.js";
+import { indexTicketRouter } from "../../tickets/src/routes/index.js";
+import { newTicketRouter } from "../../tickets/src/routes/new.js";
+import { showTicketRouter } from "../../tickets/src/routes/show.js";
+import { updateTicketRouter } from "../../tickets/src/routes/update.js";
 
 // CORS: allow browser requests from client (localhost:3000) and ticketing.dev
 app.use(

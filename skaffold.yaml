@@ -10,6 +10,8 @@ deploy:
       - ./infra/k8s/tickets-mongo-depl.yaml
       - ./infra/k8s/client-depl.yaml
       - ./infra/k8s/ingress-srv.yaml
+      - ./infra/k8s/orders-depl.yaml
+      - ./infra/k8s/orders-mongo-depl.yaml
 build:
   local:
     push: false
@@ -39,4 +41,12 @@ build:
       sync:
         manual:
           - src: 'tickets/src/**/*.ts'
+            dest: .
+    - image: ehtesham-dev/orders
+      context: .
+      docker:
+        dockerfile: orders/Dockerfile
+      sync:
+        manual:
+          - src: 'orders/src/**/*.ts'
             dest: .
