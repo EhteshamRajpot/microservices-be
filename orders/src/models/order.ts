@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import { OrderStatus } from "devnexus-microservices-common";
+import { type TicketDoc } from "./ticket.js";
 
 interface OrderAttrs {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
   ticket: TicketDoc;
+  version: number;
 }
 
 interface OrderDoc extends mongoose.Document, OrderAttrs {}
@@ -32,7 +34,12 @@ const orderSchema = new mongoose.Schema({
     ref: "Ticket",
     required: true,
   },
+  version: {
+    type: Number,
+    required: true,
+  },
 }, {
+  versionKey: false,
   toJSON: {
     transform(doc, ret: Record<string, unknown>) {
       ret.id = doc.id;
