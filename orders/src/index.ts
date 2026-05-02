@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import { app } from "./app.js";
 import { natsWrapper } from "./nats-wrapper.js";
 import dotenv from "dotenv";
+import { TicketCreatedListener } from "./events/listeners/ticket-created-listener.js";
+import { TicketUpdatedListener } from "./events/listeners/ticket-updated-listener.js";
+
 dotenv.config();
 
 const start = async () => {
@@ -15,6 +18,8 @@ const start = async () => {
   const natsClientId = process.env.NATS_CLIENT_ID || `tickets-${Math.random().toString(16).slice(2, 8)}`;
   const natsUrl = process.env.NATS_URL || "http://nats-srv:4222";
   try {
+    new TicketCreatedListener(natsWrapper.client).listen();
+    new TicketUpdatedListener(natsWrapper.client).listen();
     await natsWrapper.connect(natsClusterId, natsClientId, natsUrl);
 
     const conn = await mongoose.connect(process.env.MONGO_URI);

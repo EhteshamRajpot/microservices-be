@@ -1,6 +1,7 @@
 import { OrderStatus } from "devnexus-microservices-common";
 import { Order } from "./order.js";
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface TicketAttrs {
   _id?: string;
@@ -19,9 +20,12 @@ export interface TicketDoc extends Omit<mongoose.Document, "_id"> {
   isReserved(): Promise<boolean>;
 }
 
+
+
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc;
 }
+
 
 const ticketSchema = new mongoose.Schema(
   {
@@ -58,6 +62,8 @@ const ticketSchema = new mongoose.Schema(
   }
 );
 
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
     _id: attrs._id,
