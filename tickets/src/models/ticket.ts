@@ -5,7 +5,8 @@ interface TicketAttrs {
   title: string;
   price: number;
   userId: string;
-  version: number;
+  /** Omitted on create — defaults to 0 for mongoose-update-if-current. */
+  version?: number;
   orderId?: string;
 }
 
@@ -22,41 +23,48 @@ interface TicketModel extends mongoose.Model<TicketDoc> {
 
 }
 
-const ticketSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  userId: {
-    type: String,
-    required: true,
-  },
-  orderId: {
-    type: String,
-    required: false,
-  },
-}, {
-  toJSON: {
-    transform(doc, ret: Record<string, unknown>) {
-      ret.id = doc.id;
-      delete ret._id;
-      delete ret.__v;
+const ticketSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+    },
+    orderId: {
+      type: String,
+      required: false,
+    },
+    version: {
+      type: Number,
+      required: true,
+      default: 0,
     },
   },
-  version: {
-    type: Number,
-    required: true,
-  },
-})
+  {
+    toJSON: {
+      transform(doc, ret: Record<string, unknown>) {
+        ret.id = doc.id;
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 ticketSchema.set("versionKey", "version");
 ticketSchema.plugin(updateIfCurrentPlugin);
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs);
+  return new Ticket({
+    ...attrs,
+    version: attrs.version ?? 0,
+  });
 };
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", ticketSchema);

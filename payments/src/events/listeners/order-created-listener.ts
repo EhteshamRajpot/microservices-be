@@ -1,13 +1,15 @@
 import { Listener, OrderStatus, Subjects, type OrderCreatedEvent } from "devnexus-microservices-common";
-import type { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name.js";
 import { Order } from "../../models/order.js";
+
+/** Enough for manual ack; avoids importing `Message` from CJS `node-nats-streaming` under native ESM. */
+type AckableMsg = { ack(): void };
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   subject: Subjects.OrderCreated = Subjects.OrderCreated;
   queueGroupName = queueGroupName;
 
-  async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
+  async onMessage(data: OrderCreatedEvent["data"], msg: AckableMsg) {
     const order = Order.build({
       id: data.id,
       userId: data.userId,

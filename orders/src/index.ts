@@ -18,19 +18,20 @@ const start = async () => {
   }
   const natsClusterId = process.env.NATS_CLUSTER_ID || "ticketing";
   const natsClientId = process.env.NATS_CLIENT_ID || `tickets-${Math.random().toString(16).slice(2, 8)}`;
-  const natsUrl = process.env.NATS_URL || "http://nats-srv:4222";
+  const natsUrl = process.env.NATS_URL || "nats://nats-srv:4222";
   try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log("Connected to MongoDB at port", conn.connection.port);
+
+    await natsWrapper.connect(natsClusterId, natsClientId, natsUrl);
+
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
     new ExpirationCompleteListener(natsWrapper.client).listen();
     new PaymentCreatedListener(natsWrapper.client).listen();
-    
-    await natsWrapper.connect(natsClusterId, natsClientId, natsUrl);
-
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log("Connected to MongoDB at port", conn.connection.port);
   } catch (err) {
     console.error(err);
+    process.exit(1);
   }
   app.listen(3000, () => {
     console.log("Listening on port 3000!");

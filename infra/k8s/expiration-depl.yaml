@@ -23,4 +23,4 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NATS_URL
-              value: http://nats-srv:4222
+              value: nats://nats-srv:4222
