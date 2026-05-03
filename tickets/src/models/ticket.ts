@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { updateIfCurrentPlugin } from "devnexus-microservices-common";
 
 interface TicketAttrs {
   title: string;
   price: number;
   userId: string;
-  /** Omitted on create — defaults to 0 for mongoose-update-if-current. */
+  /** Omitted on create — defaults to 0 for OCC plugin. */
   version?: number;
   orderId?: string;
 }

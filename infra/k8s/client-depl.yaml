@@ -16,6 +16,10 @@ spec:
         - name: client
           image: ehtesham-dev/client
           imagePullPolicy: IfNotPresent
+          env:
+            # SSR calls APIs using the same public host the browser used (avoids guessing ingress Service DNS).
+            - name: SSR_USE_FORWARDED_ORIGIN
+              value: "true"
 ---
 apiVersion: v1
 kind: Service

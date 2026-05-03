@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import { updateIfCurrentPlugin } from "mongoose-update-if-current";
-import { OrderStatus } from "devnexus-microservices-common";
+import { OrderStatus, updateIfCurrentPlugin } from "devnexus-microservices-common";
 
 interface OrderAttrs {
   id: string;

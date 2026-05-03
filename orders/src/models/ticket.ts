@@ -1,7 +1,6 @@
-import { OrderStatus } from "devnexus-microservices-common";
-import { Order } from "./order.js";
 import mongoose from "mongoose";
-import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { OrderStatus, updateIfCurrentPlugin } from "devnexus-microservices-common";
+import { Order } from "./order.js";
 
 interface TicketAttrs {
   _id?: string;

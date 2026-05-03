@@ -42,16 +42,20 @@ build:
         dockerfile: tickets/Dockerfile
       sync:
         manual:
+          # Context is repo root: without strip, files land at /app/tickets/tickets/src/... (wrong).
           - src: 'tickets/src/**/*.ts'
             dest: .
+            strip: 'tickets/'
     - image: ehtesham-dev/orders
       context: .
       docker:
         dockerfile: orders/Dockerfile
       sync:
         manual:
+          # Without strip: synced TS ends up under /app/orders/orders/src/... while tsx runs /app/orders/src/...
           - src: 'orders/src/**/*.ts'
             dest: .
+            strip: 'orders/'
     - image: ehtesham-dev/expiration
       context: expiration
       docker:
@@ -61,10 +65,11 @@ build:
           - src: 'src/**/*.ts'
             dest: .
     - image: ehtesham-dev/payments
-      context: payments
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: payments/Dockerfile
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: 'payments/src/**/*.ts'
             dest: .
+            strip: 'payments/'

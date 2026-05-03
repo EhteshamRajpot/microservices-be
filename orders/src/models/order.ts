@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import { OrderStatus } from "devnexus-microservices-common";
+import { OrderStatus, updateIfCurrentPlugin } from "devnexus-microservices-common";
 import { type TicketDoc } from "./ticket.js";
-import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface OrderAttrs {
   userId: string;
@@ -31,7 +30,7 @@ const orderSchema = new mongoose.Schema({
     type: Date,
   },
   ticket: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Ticket",
     required: true,
   },
