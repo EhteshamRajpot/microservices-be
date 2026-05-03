@@ -3,7 +3,7 @@ import {
   Subjects,
   type OrderCreatedEvent,
 } from "devnexus-microservices-common";
-import { Message } from "node-nats-streaming";
+import type { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name.js";
 import { expirationQueue } from "../../queues/expiration-queue.js";
 

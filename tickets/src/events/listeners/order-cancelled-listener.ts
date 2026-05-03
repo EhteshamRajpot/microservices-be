@@ -1,8 +1,9 @@
-import { Listener, Subjects, type OrderCancelledEvent } from "devnexus-microservices-common";
+import { Listener, Subjects, type OrderCancelledEvent, type TicketUpdatedEvent } from "devnexus-microservices-common";
 import { Ticket } from "../../models/ticket.js";
-import { Message } from "node-nats-streaming";
+import type { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name.js";
 import { TicketUpdatedPublisher } from "../publishers/ticket-updated-publisher.js";
+import { natsWrapper } from "../../nats-wrapper.js";
 
 export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
   subject: Subjects.OrderCancelled = Subjects.OrderCancelled;
@@ -17,7 +18,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
       orderId: undefined as unknown as string,
     });
     await ticket.save();
-    new TicketUpdatedPublisher(this.client).publish({
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,

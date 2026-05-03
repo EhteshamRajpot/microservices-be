@@ -4,7 +4,7 @@ import {
   type OrderCreatedEvent,
 } from "devnexus-microservices-common";
 import { Ticket } from "../../models/ticket.js";
-import { Message } from "node-nats-streaming";
+import type { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name.js";
 import { natsWrapper } from "../../nats-wrapper.js";
 import { TicketUpdatedPublisher } from "../publishers/ticket-updated-publisher.js";

@@ -1,5 +1,5 @@
 import { Listener, Subjects, type ExpirationCompleteEvent, OrderStatus } from "devnexus-microservices-common";
-import { Message } from "node-nats-streaming";
+import type { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name.js";
 import { Order } from "../../models/order.js";
 import { OrderCancelledPublisher } from "../publishers/order-cancelled-publisher.js";
