@@ -12,6 +12,8 @@ deploy:
       - ./infra/k8s/ingress-srv.yaml
       - ./infra/k8s/orders-depl.yaml
       - ./infra/k8s/orders-mongo-depl.yaml
+      - ./infra/k8s/payments-depl.yaml
+      - ./infra/k8s/payments-mongo-depl.yaml
 build:
   local:
     push: false
@@ -49,4 +51,20 @@ build:
       sync:
         manual:
           - src: 'orders/src/**/*.ts'
+            dest: .
+    - image: ehtesham-dev/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: ehtesham-dev/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
             dest: .

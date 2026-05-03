@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import { app } from "./app.js";
 import { natsWrapper } from "./nats-wrapper.js";
 import dotenv from "dotenv";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener.js";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listener.js";
+
 dotenv.config();
 
 const start = async () => {
@@ -17,6 +20,8 @@ const start = async () => {
   try {
     await natsWrapper.connect(natsClusterId, natsClientId, natsUrl);
 
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
     const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB at port", conn.connection.port);
   } catch (err) {

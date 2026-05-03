@@ -4,6 +4,7 @@ import { natsWrapper } from "./nats-wrapper.js";
 import dotenv from "dotenv";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener.js";
 import { TicketUpdatedListener } from "./events/listeners/ticket-updated-listener.js";
+import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener.js";
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ const start = async () => {
   try {
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
+    new ExpirationCompleteListener(natsWrapper.client).listen();
+    
     await natsWrapper.connect(natsClusterId, natsClientId, natsUrl);
 
     const conn = await mongoose.connect(process.env.MONGO_URI);

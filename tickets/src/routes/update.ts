@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
 import { body } from "express-validator";
-import { NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from "devnexus-microservices-common";
+import { BadRequestError, NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from "devnexus-microservices-common";
 import { Ticket } from "../models/ticket.js";
 import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher.js";
 import { natsWrapper } from "../nats-wrapper.js";
@@ -12,6 +12,10 @@ router.put("/api/tickets/:id", requireAuth as any, [body("title").not().isEmpty(
   console.log('Updating ticket...', {id: req.params.id, ticket});
   if (!ticket) {
     throw new NotFoundError();
+  }
+
+  if (ticket.orderId) {
+    throw new BadRequestError("Cannot edit a reserved ticket");
   }
   if (ticket.userId !== req.currentUser!.id) {
     throw new NotAuthorizedError();
