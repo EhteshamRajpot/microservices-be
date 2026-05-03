@@ -1,4 +1,4 @@
-import { Listener, Subjects, type PaymentCreatedEvent } from "devnexus-microservices-common";
+import { Listener, OrderStatus, Subjects, type PaymentCreatedEvent } from "devnexus-microservices-common";
 import { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name.js";
 import { Order } from "../../models/order.js";
@@ -9,7 +9,13 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent> {
 
   async onMessage(data: PaymentCreatedEvent["data"], msg: Message) {
     const order = await Order.findById(data.orderId);
+    if (!order) {
+      throw new Error("Order not found");
+    }
+    order.set({
+      status: OrderStatus.Complete,
+    });
+    await order.save();
+    msg.ack();
   }
 }
-
-export { PaymentCreatedListener };
