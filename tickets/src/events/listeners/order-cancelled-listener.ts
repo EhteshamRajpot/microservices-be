@@ -1,4 +1,4 @@
-import { Listener, Subjects, type OrderCancelledEvent, type TicketUpdatedEvent } from "devnexus-microservices-common";
+import { Listener, Subjects, type OrderCancelledEvent } from "devnexus-microservices-common";
 import { Ticket } from "../../models/ticket.js";
 import type { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name.js";
@@ -14,9 +14,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     if (!ticket) {
       throw new Error("Ticket not found");
     }
-    ticket.set({
-      orderId: undefined as unknown as string,
-    });
+    (ticket as unknown as { orderId?: string | undefined }).orderId = undefined;
     await ticket.save();
     new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
@@ -24,8 +22,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
       price: ticket.price,
       userId: ticket.userId,
       version: ticket.version,
-      orderId: ticket.orderId,
-    } as TicketUpdatedEvent);
+    });
     msg.ack();
   }
 }
